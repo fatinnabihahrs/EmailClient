@@ -1,5 +1,7 @@
 //this is the gui for the 1st page of the application
 
+import com.sun.scenario.effect.impl.sw.java.JSWBlend_COLOR_BURNPeer;
+
 import java.awt.*;
 import javax.swing.*;
 
@@ -9,49 +11,92 @@ public class MainPage extends JFrame
     private Button searchBut;
     private Button nextBut;
 
+    private static String subject;
+    private static String sender;
+    private static String message;
+    private static int msgNo;
+
     public MainPage()
     {
-        //-----------------------------------------------
-        Panel topPanel = new Panel(new FlowLayout());  //TOP
-        searchBar = new TextField("0",100);
+        //-----------------------------------------------//TOP
+        Panel tPanel = new Panel(new FlowLayout());
+        searchBar = new TextField("",100);
         searchBut = new Button("SEARCH");
-        topPanel.add(searchBar);
-        topPanel.add(searchBut);
+        searchBut.setPreferredSize(new Dimension(70,75));
+        //searchBut.setBounds(150,150,80,30);
+        //searchBar.setBounds(140,110,200,30);
+        tPanel.add(searchBar);
+        tPanel.add(searchBut);
+
+        Panel mPanel = new Panel(new FlowLayout());
+        int totalM = RetrieveEmailTest.getMsgCount();
+        JLabel total = new JLabel("Total Messages: " + totalM);
+        mPanel.add(total);
+
+        JButton compButton = new JButton("COMPOSE +");
+
+        NewMsgActionListener newListener = new NewMsgActionListener("");
+        compButton.addActionListener(newListener);
+
+
+        Panel topPanel = new Panel(new GridLayout(0,1)); //TOP-putting those two panels together
+        topPanel.add(tPanel);
+        topPanel.add(mPanel);
+        topPanel.add(compButton);
         //--------------------------------------------------
         Panel middlePanel = new Panel(new GridLayout(0,1));
 
-        Panel sumPanel1 = new Panel(new GridLayout(0,1));//the summary email panel within middle panel
-        sumPanel1.add(new JLabel("-------------------------------"));
-        sumPanel1.add(new Button("EMAIL 1"));
-        sumPanel1.add(new JLabel("FROM: roda100@yahoo.com"));
-        sumPanel1.add(new JLabel("SUBJECT: Meeting Cancelled!"));
-        sumPanel1.add(new JLabel("-------------------------------"));
-        middlePanel.add(sumPanel1);
+        String[] sender = new String[totalM];
+        String[] subject = new String[totalM];
+        int[] no = new int[totalM];
 
-        Panel sumPanel2 = new Panel(new GridLayout(0,1));//the summary email panel within middle panel
-        sumPanel2.add(new JLabel("-------------------------------"));
-        sumPanel2.add(new Button("EMAIL 2"));
-        sumPanel2.add(new JLabel("FROM: booklover@gmail.com"));
-        sumPanel2.add(new JLabel("SUBJECT: New Book?"));
-        sumPanel2.add(new JLabel("-------------------------------"));
-        middlePanel.add(sumPanel2);
+        //fil in the array of the sender and subject of all emails
+        for (int i=totalM-1;i>=0;i--){
+            sender[i] = RetrieveEmailTest.getSender(i+1);
+            subject[i] = RetrieveEmailTest.getSubject(i+1);
+            no[i] = i+1;
+        }
+
+        Panel[] sumPanel = new Panel[totalM];
+        Button[] b = new Button[totalM];
 
 
-        Panel sumPanel3 = new Panel(new GridLayout(0,1));//the summary email panel within middle panel
-        sumPanel3.add(new JLabel("-------------------------------"));
-        sumPanel3.add(new Button("EMAIL 1"));
-        sumPanel3.add(new JLabel("FROM: roda100@yahoo.com"));
-        sumPanel3.add(new JLabel("SUBJECT: Meeting Cancelled!"));
-        sumPanel3.add(new JLabel("-------------------------------"));
-        middlePanel.add(sumPanel3);
+        //put the most recent email at the top
+        for (int j=totalM-1;j>=0;j--){
+            sumPanel[j] = new Panel(new GridLayout(0,1));
+            b[j] = new Button("EMAIL " + (j+1));
+            sumPanel[j].add(b[j]);
+            sumPanel[j].add(new JLabel("FROM: " + sender[j]));
+            sumPanel[j].add(new JLabel("SUBJECT: " + subject[j]));
+            middlePanel.add(sumPanel[j]);
+        }
 
-        Panel sumPanel4 = new Panel(new GridLayout(0,1));//the summary email panel within middle panel
-        sumPanel4.add(new JLabel("-------------------------------"));
-        sumPanel4.add(new Button("EMAIL 2"));
-        sumPanel4.add(new JLabel("FROM: booklover@gmail.com"));
-        sumPanel4.add(new JLabel("SUBJECT: New Book?"));
-        sumPanel4.add(new JLabel("-------------------------------"));
-        middlePanel.add(sumPanel4);
+        //action listener for the button to view each specific email
+        ViewActionListener[] vListener = new ViewActionListener[totalM];
+
+        //a class to store the properties of an email
+        Email[] manyEmails = new Email[totalM];
+
+
+//        //attach listener to the button
+////        for (int k=totalM-1;k>=0;k--){
+////            System.out.println("Main page: " + no[k]);
+////            vListener[k] = new ViewActionListener(sender[k], subject[k], no[k]);
+////            System.out.println("Attach " + vListener[k].getEmailNo());
+////            b[k].addActionListener(vListener[k]);
+////        }
+        for (int k=totalM-1;k>=0;k--){
+            manyEmails[k] = new Email(sender[k], subject[k], no[k]);
+
+
+            //specify the action listener for each button
+            vListener[k] = new ViewActionListener();
+            //ViewActionListener.setEmailNo(k+1);
+            b[k].addActionListener(vListener[k]);
+        }
+
+
+
 
 
         //--------------------------------------------------
@@ -74,5 +119,7 @@ public class MainPage extends JFrame
     public static void main(String[] args){
         MainPage em = new MainPage();
         em.setVisible(true);
+
     }
+
 }

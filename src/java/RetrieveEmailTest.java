@@ -1,5 +1,3 @@
-//import com.sun.org.apache.xpath.internal.operations.Mult;
-
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -13,12 +11,16 @@ public class RetrieveEmailTest {
     private static int msgCount;  //used as JLabel in MainPage
 
     private static String subject;
-    private static String recipient;
+    private static String sender;
     private static int emailNo;
+    private static String messagePassed;
+
 
     public static void main (String[] args){
 
-        int max = 5; //take the last 5 emails messages
+        int choose = Integer.parseInt(args[0]);
+        int index = Integer.parseInt(args[1]);
+
 
         try {
             String host = "imap.gmail.com";
@@ -48,25 +50,15 @@ public class RetrieveEmailTest {
             Folder emailFolder = store.getFolder("INBOX");
             emailFolder.open(Folder.READ_ONLY);
 
-            msgCount = emailFolder.getMessageCount();
-            System.out.println("Total message in INBOX: " + msgCount);
-
-            Message[] messages = emailFolder.getMessages();
-            System.out.println("Messages: " + messages.length);
-
-
-            //print last 5 emails
-            for(int i=msgCount;i>msgCount-max;i--){
-                Message message = emailFolder.getMessage(i);
-                System.out.println("-------------------------");
-                System.out.println("Email number: " + (i));
-                System.out.println("Subject: "+  message.getSubject());
-                System.out.println("From: " + message.getFrom()[0]);
-                System.out.println("Content: "); //returns an object
-                System.out.println(getTextMessage(message));
-                System.out.println("-------------------------");
+            if (choose == 0)
+                msgCount = emailFolder.getMessageCount();
+            else {
+                //System.out.println("Line 56 RET:" + index);
+                Message message = emailFolder.getMessage(index);
+                subject = message.getSubject();
+                sender = "" + message.getFrom()[0];
+                messagePassed = getTextMessage(message); //content of the message
             }
-
         }
         catch (Exception e){
             System.out.println(e);
@@ -75,8 +67,6 @@ public class RetrieveEmailTest {
 
     }
 
-    private static String message;
-
     public static String getTextMessage(Part m) throws Exception {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         //System.out.println("--CONTENT-TYPE:--" + m.getContentType());--for testing content type
@@ -84,7 +74,7 @@ public class RetrieveEmailTest {
         //for now only handle plain text
         //others etc attachments, html ignored as nothing to do with features-FOR NOW
         if (m.isMimeType("text/plain")){
-            message =  (String) m.getContent();
+            messagePassed =  (String) m.getContent();
         }
         else if (m.isMimeType("multipart/*")){
             Multipart mult = (Multipart) m.getContent();
@@ -102,29 +92,38 @@ public class RetrieveEmailTest {
 //                int i;
 //                while ((i = in.read()) != -1)
 //                    System.out.write(i);
-                message = "";
+                messagePassed = "";
             }
             else
-                message = "";
+                messagePassed = "";
         }
-        return message;
+        return messagePassed;
     }
 
     //JLabel at the top of MainPage
     public static int getMsgCount(){
-         return msgCount;
+        start(0, 0);
+        return msgCount;
     }
 
-    public static String getSubject(){
+    public static String getSubject(int index){
+        start(1, index);
         return subject;
     }
 
-    public static String getRecipient(){
-        return recipient;
+    public static String getSender(int index){
+        start(1, index);
+        return sender;
     }
 
-    public static int getEmailNo(){
-        return emailNo;
+    public static String getMessage(int index){
+        start(1, index);
+        return messagePassed;
     }
+
+    public static void start(int choose, int index){
+        String args[] = {"" + choose, "" + index};
+        main(args);
+    } //invoke the main method to start
 
 }

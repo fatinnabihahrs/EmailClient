@@ -3,40 +3,56 @@ import javax.swing.*;
 
 public class ComposeEmail extends JFrame {
 
-    private static JTextField recipient;
-    private static JTextField subject;
-    private static JTextArea email;
+    private static JTextField recipientField;
+    private static JTextField subjectField;
+    private static JTextArea emailField;
+
+    private static String recipient = "";
+    private static String subject = "";
+    private static String message = "";
 
     //contructor
     public ComposeEmail(){
 
         //--------------------------------------------------------
-        recipient = new JTextField("Recipient's email",100); //TOP
-        subject = new JTextField("Subject", 100);
+        JLabel r = new JLabel("Recipient:");          //TOP
+        //recipient = "";
+        recipientField = new JTextField(recipient,100);
+        Panel p1 = new Panel(new FlowLayout());
+        p1.add(r);
+        p1.add(recipientField);
+
+        JLabel s = new JLabel("Subject:");
+//        subject = "";
+        subjectField = new JTextField(subject, 100);
+        Panel p2 = new Panel(new FlowLayout());
+        p2.add(s);
+        p2.add(subjectField);
 
         Panel topPanel = new Panel(new GridLayout(0,1));
-        topPanel.add(recipient);
-        topPanel.add(subject);
+        topPanel.add(p1);
+        topPanel.add(p2);
         //--------------------------------------------------------
-        email = new JTextArea(100,100); //CENTER
+
+        emailField = new JTextArea(100,100); //CENTER
         //-------------------------------------------------------
         JPanel bottom = new JPanel(new FlowLayout()); //BOTTOM
         JButton sendButton = new JButton("SEND");
         bottom.add(sendButton);
         //-------------------------------------------------------
 
-        setTitle("Composing an Email");
+        setTitle("New Email");
         Container contents = getContentPane();
         contents.setLayout(new BorderLayout());
         contents.add(topPanel, BorderLayout.NORTH);
-        contents.add(email, BorderLayout.CENTER);
+        contents.add(emailField, BorderLayout.CENTER);
         contents.add(bottom, BorderLayout.SOUTH);
 
 
         SendActionListener listener = new SendActionListener();
         sendButton.addActionListener(listener);                    //if the sendButton is press, then invoke the method in action listener
 
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
         pack();
 
 
@@ -49,14 +65,32 @@ public class ComposeEmail extends JFrame {
 
 
     public static String getRecipient() {
-        return recipient.getText();
+        return recipientField.getText();
     }
 
     public static String getSubject(){
-        return subject.getText();
+        return subjectField.getText();
     }
 
     public static String getEmailMessage(){
-        return email.getText();
+        return emailField.getText();
     }
+
+    ///////////////////////////////////////////////////////////////
+    //used to replying an email need to setup based on prev email
+    //use the compose email template to put all the stuff in
+    public static void setRecipient(String s){
+        recipient = s;
+    }
+
+    public static void setSubject (String s){
+        subject = s;
+    }
+
+    //use here for replying/forwarding/redirecting
+    //need to a way for distinguish the prev email message to the new email type by user
+    public static void setEmailMessage(String s){
+        emailField.setText(s);
+    }
+
 }
