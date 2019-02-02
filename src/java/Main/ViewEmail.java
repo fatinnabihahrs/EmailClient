@@ -42,17 +42,17 @@ public class ViewEmail extends JFrame{
         contents.add(email, BorderLayout.CENTER);
         contents.add(bottomPanel, BorderLayout.SOUTH);
 
-        NewMsgActionListener newListener = new NewMsgActionListener(sender);
+        NewMsgActionListener newListener = new NewMsgActionListener(sender);  //DONE
         newMsgBut.addActionListener(newListener);
 
         ForwardActionListener fwdListener = new ForwardActionListener();
         forwardBut.addActionListener(fwdListener);
 
-        ReplyActionListener rpyListener = new ReplyActionListener();
+        ReplyActionListener rpyListener = new ReplyActionListener(); //INLINE POSTING
         replyBut.addActionListener(rpyListener);
 
-        RedirectActionListener rdtListener = new RedirectActionListener();
-        redirectBut.addActionListener(rdtListener);
+        //RedirectActionListener rdtListener = new RedirectActionListener();
+        //redirectBut.addActionListener(rdtListener);
 
 
         setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);

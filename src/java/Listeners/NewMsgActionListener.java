@@ -15,6 +15,7 @@ public class NewMsgActionListener implements ActionListener {
     public void actionPerformed(ActionEvent e){
         ComposeEmail c = new ComposeEmail();
         c.setRecipient(recipient);
+        recipient = ""; //set it to empty string back
         c.main(null);
 //        c.setRecipient("");
     }

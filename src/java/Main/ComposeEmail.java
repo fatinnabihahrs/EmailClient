@@ -6,6 +6,7 @@ import Listeners.SendActionListener;
 
 public class ComposeEmail extends JFrame {
 
+    private static JTextField senderField;
     private static JTextField recipientField;
     private static JTextField subjectField;
     private static JTextArea emailField;
@@ -13,12 +14,20 @@ public class ComposeEmail extends JFrame {
     private static String recipient = "";
     private static String subject = "";
     private static String message = "";
+    private static String sender = "";
 
     //contructor
     public ComposeEmail(){
 
         //--------------------------------------------------------
-        JLabel r = new JLabel("Recipient:");          //TOP
+        JLabel send = new JLabel("Sender:");          //TOP
+        //recipient = "";
+        senderField = new JTextField(sender,100);
+        Panel p0 = new Panel(new FlowLayout());
+        p0.add(send);
+        p0.add(senderField);
+
+        JLabel r = new JLabel("Recipient:");
         //recipient = "";
         recipientField = new JTextField(recipient,100);
         Panel p1 = new Panel(new FlowLayout());
@@ -33,6 +42,7 @@ public class ComposeEmail extends JFrame {
         p2.add(subjectField);
 
         Panel topPanel = new Panel(new GridLayout(0,1));
+        topPanel.add(p0);
         topPanel.add(p1);
         topPanel.add(p2);
         //--------------------------------------------------------
@@ -66,6 +76,9 @@ public class ComposeEmail extends JFrame {
         em.setVisible(true);
     }
 
+    private static String getSender(){
+        return senderField.getText();
+    }
 
     public static String getRecipient() {
         return recipientField.getText();
@@ -94,6 +107,10 @@ public class ComposeEmail extends JFrame {
     //need to a way for distinguish the prev email message to the new email type by user
     public static void setEmailMessage(String s){
         emailField.setText(s);
+    }
+
+    public static void setSender (String s){
+        sender = s;
     }
 
 }
