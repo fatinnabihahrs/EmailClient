@@ -18,7 +18,7 @@ import java.util.Properties;
 
 public class SendingEmail {
 
-
+    private static String from = "projectfatin@gmail.com";; //sender's email -- the default email is projectfatin@gmail.com
     private static String recipient; //recipient's email
     private static String subject;  //subject
     private static String content;  //email content
@@ -29,7 +29,10 @@ public class SendingEmail {
 
             String user = "projectfatin@gmail.com";
             String password = "blngwyzxdgwdcgfb";             //gmail password-for app that dont support 2 factor verification
-            String from = "projectfatin@gmail.com";
+
+
+            //from = "projectfatin@gmail.com";         //default sender
+
 
             boolean sessionDebug = false;
             Properties props = System.getProperties();
@@ -71,6 +74,10 @@ public class SendingEmail {
 
     public static void setRecp(String r){
         recipient = r;
+    }
+
+    public static void setFrom(String r){
+        from = r;
     }
 
     public static void start(){

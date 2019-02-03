@@ -1,8 +1,11 @@
+//this action listener is used for replying with a new message/subject --NEW MSG Feature in ViewEmail
+
 package Listeners;
+
+import Main.ReplyNewMessage;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import Main.ComposeEmail;
 
 public class NewMsgActionListener implements ActionListener {
 
@@ -13,10 +16,14 @@ public class NewMsgActionListener implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e){
-        ComposeEmail c = new ComposeEmail();
-        c.setRecipient(recipient);
-        recipient = ""; //set it to empty string back
-        c.main(null);
-//        c.setRecipient("");
+        ReplyNewMessage r = new ReplyNewMessage();
+
+        //set the "TO" text field
+        //but leave the rest of the text fields empty
+        r.setRecipient(recipient);
+        r.setSubject("");
+        r.setEmailMessage("");
+
+        r.main(null);
     }
 }

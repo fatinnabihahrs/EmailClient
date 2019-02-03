@@ -45,14 +45,14 @@ public class ViewEmail extends JFrame{
         NewMsgActionListener newListener = new NewMsgActionListener(sender);  //DONE
         newMsgBut.addActionListener(newListener);
 
-        ForwardActionListener fwdListener = new ForwardActionListener();
+        ForwardActionListener fwdListener = new ForwardActionListener(subject, message); //DONE
         forwardBut.addActionListener(fwdListener);
 
         ReplyActionListener rpyListener = new ReplyActionListener(); //INLINE POSTING
         replyBut.addActionListener(rpyListener);
 
-        //RedirectActionListener rdtListener = new RedirectActionListener();
-        //redirectBut.addActionListener(rdtListener);
+        RedirectActionListener rdtListener = new RedirectActionListener(sender,subject,message);
+        redirectBut.addActionListener(rdtListener);
 
 
         setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
@@ -63,6 +63,7 @@ public class ViewEmail extends JFrame{
     public static void main(String[] args){
         ViewEmail em = new ViewEmail();
         em.setVisible(true);
+        //sender = "";
     }
 
     public static void setSender(String s){

@@ -2,7 +2,7 @@ package Main;//this is the gui for the 1st page of the application
 
 import javax.swing.*;
 import java.awt.*;
-import Listeners.NewMsgActionListener;
+import Listeners.*;
 import Listeners.ViewActionListener;
 
 public class MainPage extends JFrame
@@ -34,8 +34,8 @@ public class MainPage extends JFrame
 
         JButton compButton = new JButton("COMPOSE +");
 
-        NewMsgActionListener newListener = new NewMsgActionListener("");
-        compButton.addActionListener(newListener);
+        ComposeActionListener cListener = new ComposeActionListener();
+        compButton.addActionListener(cListener);
 
 
         Panel topPanel = new Panel(new GridLayout(0,1)); //TOP-putting those two panels together

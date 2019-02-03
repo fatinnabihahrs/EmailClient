@@ -6,7 +6,7 @@ import Listeners.SendActionListener;
 
 public class ComposeEmail extends JFrame {
 
-    private static JTextField senderField;
+    //private static JTextField senderField;
     private static JTextField recipientField;
     private static JTextField subjectField;
     private static JTextArea emailField;
@@ -14,40 +14,39 @@ public class ComposeEmail extends JFrame {
     private static String recipient = "";
     private static String subject = "";
     private static String message = "";
-    private static String sender = "";
 
     //contructor
     public ComposeEmail(){
 
         //--------------------------------------------------------
-        JLabel send = new JLabel("Sender:");          //TOP
-        //recipient = "";
-        senderField = new JTextField(sender,100);
-        Panel p0 = new Panel(new FlowLayout());
-        p0.add(send);
-        p0.add(senderField);
+//        JLabel send = new JLabel("Sender:");          //TOP
+//        //recipient = "";
+//        senderField = new JTextField(sender,100);
+//        Panel p0 = new Panel(new FlowLayout());
+//        p0.add(send);
+//        p0.add(senderField);
 
-        JLabel r = new JLabel("Recipient:");
-        //recipient = "";
+        JLabel r = new JLabel("To:");
         recipientField = new JTextField(recipient,100);
         Panel p1 = new Panel(new FlowLayout());
         p1.add(r);
         p1.add(recipientField);
 
         JLabel s = new JLabel("Subject:");
-//        subject = "";
         subjectField = new JTextField(subject, 100);
         Panel p2 = new Panel(new FlowLayout());
         p2.add(s);
         p2.add(subjectField);
 
         Panel topPanel = new Panel(new GridLayout(0,1));
-        topPanel.add(p0);
+        //topPanel.add(p0);
         topPanel.add(p1);
         topPanel.add(p2);
         //--------------------------------------------------------
-
-        emailField = new JTextArea(100,100); //CENTER
+        if (message == "")
+            emailField = new JTextArea(100,100); //CENTER
+        else
+            emailField = new JTextArea(message ,100,100);
         //-------------------------------------------------------
         JPanel bottom = new JPanel(new FlowLayout()); //BOTTOM
         JButton sendButton = new JButton("SEND");
@@ -76,9 +75,9 @@ public class ComposeEmail extends JFrame {
         em.setVisible(true);
     }
 
-    private static String getSender(){
+    /*private static String getSender(){
         return senderField.getText();
-    }
+    }*/
 
     public static String getRecipient() {
         return recipientField.getText();
@@ -103,14 +102,11 @@ public class ComposeEmail extends JFrame {
         subject = s;
     }
 
+
     //use here for replying/forwarding/redirecting
     //need to a way for distinguish the prev email message to the new email type by user
-    public static void setEmailMessage(String s){
-        emailField.setText(s);
-    }
-
-    public static void setSender (String s){
-        sender = s;
+    public static void setEmailMessage(String s) {
+        message = s;
     }
 
 }
