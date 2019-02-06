@@ -7,16 +7,43 @@ import Listeners.ViewActionListener;
 
 public class MainPage extends JFrame
 {
-    private TextField searchBar;
-    private Button searchBut;
-    private Button nextBut;
+    private static TextField searchBar;
+    private static Button searchBut;
+    private static Button nextBut;
+
+    private static JMenuBar bar;
+    private static JMenu menu;
+    private static JMenu submenu;
+    private static JMenuItem i1, i2, i3;
 
     private static String[] senderArray;
     private static String[] messageArray;
     private static String[] subjectArray;
 
+    private static String option = "";
+
+
     public MainPage()
     {
+        //------------------------------------------------MENU BAR AT WINDOW BAR
+        bar = new JMenuBar();
+        menu = new JMenu("Settings");
+        submenu = new JMenu("Reply");
+        i1 = new JMenuItem("Top-posting");
+        i2 = new JMenuItem("Bottom-posting");
+        i3 = new JMenuItem("Inline-posting");
+
+        ReplySettingsActionListener rcpSett = new ReplySettingsActionListener(option);
+        i1.addActionListener(rcpSett);
+        i2.addActionListener(rcpSett);
+        i3.addActionListener(rcpSett);
+
+        bar.add(menu);
+        menu.add(submenu);
+        submenu.add(i1);
+        submenu.add(i2);
+        submenu.add(i3);
+
         //-----------------------------------------------//TOP
         Panel tPanel = new Panel(new FlowLayout());
         searchBar = new TextField("",100);
@@ -101,6 +128,7 @@ public class MainPage extends JFrame
 
     public static void main(String[] args){
         MainPage em = new MainPage();
+        em.setJMenuBar(bar);
         em.setVisible(true);
 
     }

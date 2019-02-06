@@ -48,10 +48,11 @@ public class ViewEmail extends JFrame{
         ForwardActionListener fwdListener = new ForwardActionListener(subject, message); //DONE
         forwardBut.addActionListener(fwdListener);
 
-        ReplyActionListener rpyListener = new ReplyActionListener(); //INLINE POSTING
+        //give the user the option to reply with top, bottom or inline posting (posting style)
+        ReplyActionListener rpyListener = new ReplyActionListener(sender, subject, message);
         replyBut.addActionListener(rpyListener);
 
-        RedirectActionListener rdtListener = new RedirectActionListener(sender,subject,message);
+        RedirectActionListener rdtListener = new RedirectActionListener(sender,subject,message); //DONE MOSTLY??
         redirectBut.addActionListener(rdtListener);
 
 

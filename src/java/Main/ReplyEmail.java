@@ -3,27 +3,12 @@ package Main;
 import javax.swing.*;
 import java.awt.*;
 
-public class ReplyEmail extends JFrame{
+public class ReplyEmail extends ComposeEmail{
 
     //contructor
     public ReplyEmail(){
 
-        //--------------------------------------------------------
-        JTextArea email = new JTextArea(100,100);
-        //-------------------------------------------------------
-        JPanel bottom = new JPanel(new FlowLayout());
-        JButton send = new JButton("SEND");
-        bottom.add(send);
-        //-------------------------------------------------------
-
-        setTitle("Replying to an Email");
-        Container contents = getContentPane();
-        contents.setLayout(new BorderLayout());
-        contents.add(email, BorderLayout.CENTER);
-        contents.add(bottom, BorderLayout.SOUTH);
-
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        pack();
+        super();
     }
 
     public static void main(String[] args){
