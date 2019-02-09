@@ -28,10 +28,15 @@ public class MainPage extends JFrame
         //------------------------------------------------MENU BAR AT WINDOW BAR
         bar = new JMenuBar();
         menu = new JMenu("Settings");
+        menu.setFont(new Font("Verdana", Font.PLAIN, 20));
         submenu = new JMenu("Reply");
+        submenu.setFont(new Font("Verdana", Font.PLAIN, 20));
         i1 = new JMenuItem("Top-posting");
+        i1.setFont(new Font("Verdana", Font.PLAIN, 20));
         i2 = new JMenuItem("Bottom-posting");
+        i2.setFont(new Font("Verdana", Font.PLAIN, 20));
         i3 = new JMenuItem("Inline-posting");
+        i3.setFont(new Font("Verdana", Font.PLAIN, 20));
 
         ReplySettingsActionListener rcpSett = new ReplySettingsActionListener(option);
         i1.addActionListener(rcpSett);
@@ -47,8 +52,10 @@ public class MainPage extends JFrame
         //-----------------------------------------------//TOP
         Panel tPanel = new Panel(new FlowLayout());
         searchBar = new TextField("",100);
+        searchBar.setFont(new Font("Verdana", Font.PLAIN, 30));
         searchBut = new Button("SEARCH");
-        searchBut.setPreferredSize(new Dimension(70,75));
+        searchBut.setFont(new Font("Verdana", Font.BOLD, 20));
+        //searchBut.setPreferredSize(new Dimension(70,75));
         //searchBut.setBounds(150,150,80,30);
         //searchBar.setBounds(140,110,200,30);
         tPanel.add(searchBar);
@@ -57,9 +64,11 @@ public class MainPage extends JFrame
         Panel mPanel = new Panel(new FlowLayout());
         int totalM = RetrieveEmailTest.getMsgCount(); //total number of messages currently in email account
         JLabel total = new JLabel("Total Messages: " + totalM);
+        total.setFont(new Font("Verdana", Font.BOLD, 20));
         mPanel.add(total);
 
         JButton compButton = new JButton("COMPOSE +");
+        compButton.setFont(new Font("Verdana", Font.BOLD, 20));
 
         ComposeActionListener cListener = new ComposeActionListener();
         compButton.addActionListener(cListener);
@@ -93,9 +102,14 @@ public class MainPage extends JFrame
         for (int j=totalM-1;j>=0;j--){
             sumPanel[j] = new Panel(new GridLayout(0,1));
             b[j] = new Button(""+ (j+1));
+            b[j].setFont(new Font("Verdana", Font.BOLD, 20));
             sumPanel[j].add(b[j]);
-            sumPanel[j].add(new JLabel("FROM: " + senderArray[j]));
-            sumPanel[j].add(new JLabel("SUBJECT: " + subjectArray[j]));
+            JLabel K = new JLabel("FROM: " + senderArray[j]);
+            K.setFont(new Font("Verdana", Font.PLAIN, 18));
+            sumPanel[j].add(K);
+            JLabel L = new JLabel("SUBJECT: " + subjectArray[j]);
+            L.setFont(new Font("Verdana", Font.PLAIN, 18));
+            sumPanel[j].add(L);
             middlePanel.add(sumPanel[j]);
         }
 
@@ -112,6 +126,7 @@ public class MainPage extends JFrame
         //--------------------------------------------------
         Panel bottomPanel = new Panel(new FlowLayout()); //BOTTOM
         nextBut = new Button("NEXT");
+        nextBut.setFont(new Font("Verdana", Font.PLAIN, 20));
         bottomPanel.add(nextBut);
         //--------------------------------------------------
         setTitle("Basic Email Client");

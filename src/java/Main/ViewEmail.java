@@ -20,16 +20,27 @@ public class ViewEmail extends JFrame{
         Panel topPanel = new Panel(new GridLayout(2,0));  //TOP
 
         JLabel j = new JLabel("FROM: " + sender);
+        j.setFont(new Font("Verdana", Font.BOLD, 18));
+
+        JLabel k = new JLabel("SUBJECT: " + subject);
+        k.setFont(new Font("Verdana", Font.BOLD, 18));
+
         topPanel.add(j);
-        topPanel.add(new JLabel("SUBJECT: " + subject));
+        topPanel.add(k);
         //------------------------------------------------
         JLabel email = new JLabel("<html>"  + message + "</html>");  //MIDDLE
+        //JLabel email = new JLabel(message);  //MIDDLE
+        email.setFont(new Font("Verdana", Font.BOLD, 18));
         //------------------------------------------------
         Panel bottomPanel = new Panel(new FlowLayout());        //BOTTOM
         JButton newMsgBut = new JButton("NEW MESSAGE");
+        newMsgBut.setFont(new Font("Verdana", Font.PLAIN, 20));
         JButton replyBut = new JButton("REPLY");
+        replyBut.setFont(new Font("Verdana", Font.PLAIN, 20));
         JButton forwardBut = new JButton("FORWARD");
+        forwardBut.setFont(new Font("Verdana", Font.PLAIN, 20));
         JButton redirectBut = new JButton("REDIRECT");
+        redirectBut.setFont(new Font("Verdana", Font.PLAIN, 20));
         bottomPanel.add(newMsgBut);
         bottomPanel.add(replyBut);
         bottomPanel.add(forwardBut);
@@ -57,14 +68,13 @@ public class ViewEmail extends JFrame{
 
 
         setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-//        pack();
-        setSize(500,500); //set the default size of the new view email window
+        //pack();
+        setSize(750,750); //set the default size of the new view email window
     }
 
     public static void main(String[] args){
         ViewEmail em = new ViewEmail();
         em.setVisible(true);
-        //sender = "";
     }
 
     public static void setSender(String s){

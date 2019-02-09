@@ -7,9 +7,9 @@ import Listeners.SendActionListener;
 public class ComposeEmail extends JFrame {
 
     //private static JTextField senderField;
-    private static JTextField recipientField;
-    private static JTextField subjectField;
-    private static JTextArea emailField;
+    private static TextField recipientField;
+    private static TextField subjectField;
+    private static TextArea emailField;
 
     private static String recipient = "";
     private static String subject = "";
@@ -18,22 +18,20 @@ public class ComposeEmail extends JFrame {
     //contructor
     public ComposeEmail(){
 
-        //--------------------------------------------------------
-//        JLabel send = new JLabel("Sender:");          //TOP
-//        //recipient = "";
-//        senderField = new JTextField(sender,100);
-//        Panel p0 = new Panel(new FlowLayout());
-//        p0.add(send);
-//        p0.add(senderField);
+        //--------------------------------------------------------TOP
 
         JLabel r = new JLabel("To:");
-        recipientField = new JTextField(recipient,100);
+        r.setFont(new Font("Verdana", Font.PLAIN, 20));
+        recipientField = new TextField(recipient,100);
+        recipientField.setFont(new Font("Verdana", Font.BOLD, 30));
         Panel p1 = new Panel(new FlowLayout());
         p1.add(r);
         p1.add(recipientField);
 
         JLabel s = new JLabel("Subject:");
-        subjectField = new JTextField(subject, 100);
+        s.setFont(new Font("Verdana", Font.PLAIN, 20));
+        subjectField = new TextField(subject, 100);
+        subjectField.setFont(new Font("Verdana", Font.BOLD, 30));
         Panel p2 = new Panel(new FlowLayout());
         p2.add(s);
         p2.add(subjectField);
@@ -44,12 +42,16 @@ public class ComposeEmail extends JFrame {
         topPanel.add(p2);
         //--------------------------------------------------------
         if (message == "")
-            emailField = new JTextArea(100,100); //CENTER
+            emailField = new TextArea(100,100); //CENTER
         else
-            emailField = new JTextArea(message ,100,100);
+            emailField = new TextArea(message ,100,100);
+
+        emailField.setFont(new Font("Verdana", Font.BOLD, 30));
+        //emailField.setCaretPosition(0);
         //-------------------------------------------------------
         JPanel bottom = new JPanel(new FlowLayout()); //BOTTOM
         JButton sendButton = new JButton("SEND");
+        sendButton.setFont(new Font("Verdana", Font.PLAIN, 20));
         bottom.add(sendButton);
         //-------------------------------------------------------
 
@@ -72,6 +74,7 @@ public class ComposeEmail extends JFrame {
 
     public static void main(String[] args){
         ComposeEmail em = new ComposeEmail();
+        //em.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
         em.setVisible(true);
     }
 
