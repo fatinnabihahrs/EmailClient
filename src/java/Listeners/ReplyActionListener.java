@@ -11,29 +11,32 @@ public class ReplyActionListener implements ActionListener {
     private static String recipient;
     private static String subject;
     private static String message;
-    private static ReplyEmail r;
-
+    private static ReplyEmail reply;
     public ReplyActionListener(String r, String s, String m){
         recipient = r;
         subject = s;
         message = m;
+        reply = new ReplyEmail();
     }
 
     public void actionPerformed (ActionEvent e) {
-        if (option == "TOP-POSTING") {
+        if (option.equals("TOP-POSTING")) {
             handleBasic();
-            r.setEmailMessage(message);
-        } else if (option == "BOTTOM-POSTING") {
+            reply.setEmailMessage(message);
+            reply.getEmailField().setCaretPosition(5);
+        } else if (option.equals("BOTTOM-POSTING")) {
             handleBasic();
-            r.setEmailMessage(message);
-        } else if (option == "INLINE-POSTING") {
+            reply.setEmailMessage(message);
+            //r.getEmailField().setCaretPosition(r.getEmailField().getText().length());
+        } else if (option.equals("INLINE-POSTING")) {
             handleBasic();
-            r.setEmailMessage(message);
+            //r.setEmailMessage(message);
         } else{
             handleBasic();
-            r.setEmailMessage(message);
+            reply.setEmailMessage(message);
+            //r.getEmailField().setCaretPosition(0);
         }
-        r.main(null);
+        reply.main(null);
     }
 
     public static void setReplySettings(String o){
@@ -41,8 +44,8 @@ public class ReplyActionListener implements ActionListener {
     }
 
     public static void handleBasic(){
-        r.setRecipient(recipient);
-        r.setSubject(subject);
+        reply.setRecipient(recipient);
+        reply.setSubject(subject);
     }
 
 

@@ -24,6 +24,7 @@ public class ComposeEmail extends JFrame {
         r.setFont(new Font("Verdana", Font.PLAIN, 20));
         recipientField = new TextField(recipient,100);
         recipientField.setFont(new Font("Verdana", Font.BOLD, 30));
+
         Panel p1 = new Panel(new FlowLayout());
         p1.add(r);
         p1.add(recipientField);
@@ -43,11 +44,13 @@ public class ComposeEmail extends JFrame {
         //--------------------------------------------------------
         if (message == "")
             emailField = new TextArea(100,100); //CENTER
-        else
-            emailField = new TextArea(message ,100,100);
+        else {
+            //emailField = new TextArea("\n -----Original Message----- \n" + message, 100, 100); //only use this for reply button set
+            emailField = new TextArea("\n" + ">" + message, 100, 100);
+            //emailField.setCaretPosition(0);
+        }
 
         emailField.setFont(new Font("Verdana", Font.BOLD, 30));
-        //emailField.setCaretPosition(0);
         //-------------------------------------------------------
         JPanel bottom = new JPanel(new FlowLayout()); //BOTTOM
         JButton sendButton = new JButton("SEND");
@@ -110,6 +113,11 @@ public class ComposeEmail extends JFrame {
     //need to a way for distinguish the prev email message to the new email type by user
     public static void setEmailMessage(String s) {
         message = s;
+    }
+
+
+    public static TextArea getEmailField(){
+        return emailField;
     }
 
 }

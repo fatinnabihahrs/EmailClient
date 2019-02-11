@@ -1,15 +1,20 @@
 package Main;//this is the gui for the 1st page of the application
+//put the recent 10 emails at first page, 11-20 on 2nd page, and so on...
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import Listeners.*;
 import Listeners.ViewActionListener;
 
-public class MainPage extends JFrame
+public class MainPage extends JFrame implements ActionListener
 {
     private static TextField searchBar;
     private static Button searchBut;
     private static Button nextBut;
+    private static Button backBut;
 
     private static JMenuBar bar;
     private static JMenu menu;
@@ -20,12 +25,25 @@ public class MainPage extends JFrame
     private static String[] messageArray;
     private static String[] subjectArray;
 
+    private static Panel[] sumPanel;
+    private static Panel middlePanel;
+    private static Button[] b;
+
+    private static JLabel K;
+    private static JLabel L;
+    private static ViewActionListener[] vListener;
+
+
     private static String option = "";
+    private static int start;
+    private static int totalPanelsPerPage = 10;
+    private static int totalM;
 
 
     public MainPage()
     {
         //------------------------------------------------MENU BAR AT WINDOW BAR
+
         bar = new JMenuBar();
         menu = new JMenu("Settings");
         menu.setFont(new Font("Verdana", Font.PLAIN, 20));
@@ -55,14 +73,12 @@ public class MainPage extends JFrame
         searchBar.setFont(new Font("Verdana", Font.PLAIN, 30));
         searchBut = new Button("SEARCH");
         searchBut.setFont(new Font("Verdana", Font.BOLD, 20));
-        //searchBut.setPreferredSize(new Dimension(70,75));
-        //searchBut.setBounds(150,150,80,30);
-        //searchBar.setBounds(140,110,200,30);
         tPanel.add(searchBar);
         tPanel.add(searchBut);
 
         Panel mPanel = new Panel(new FlowLayout());
-        int totalM = RetrieveEmailTest.getMsgCount(); //total number of messages currently in email account
+        totalM = RetrieveEmailTest.getMsgCount(); //total number of messages currently in email account
+        start = totalM;
         JLabel total = new JLabel("Total Messages: " + totalM);
         total.setFont(new Font("Verdana", Font.BOLD, 20));
         mPanel.add(total);
@@ -78,56 +94,91 @@ public class MainPage extends JFrame
         topPanel.add(tPanel);
         topPanel.add(mPanel);
         topPanel.add(compButton);
-        //--------------------------------------------------FROM HERE ONWARDS- POTENTIAL AREA FOR THE BUG
-        Panel middlePanel = new Panel(new GridLayout(0,1));
 
+        middlePanel = new Panel(new GridLayout(0,1));
         senderArray = new String[totalM];
         subjectArray = new String[totalM];
         messageArray = new String[totalM];
-        int[] no = new int[totalM];
-
-        //fil in the array of the sender ,subject, and message of all emails
-        for (int i=totalM-1;i>=0;i--){
-            senderArray[i] = RetrieveEmailTest.getSender(i+1);
-            subjectArray[i] = RetrieveEmailTest.getSubject(i+1);
-            messageArray[i] = RetrieveEmailTest.getMessage(i+1);
-            no[i] = i+1;
-        }
-
-        Panel[] sumPanel = new Panel[totalM];
-        Button[] b = new Button[totalM];
 
 
-        //put the most recent email at the top
-        for (int j=totalM-1;j>=0;j--){
-            sumPanel[j] = new Panel(new GridLayout(0,1));
-            b[j] = new Button(""+ (j+1));
-            b[j].setFont(new Font("Verdana", Font.BOLD, 20));
-            sumPanel[j].add(b[j]);
-            JLabel K = new JLabel("FROM: " + senderArray[j]);
-            K.setFont(new Font("Verdana", Font.PLAIN, 18));
-            sumPanel[j].add(K);
-            JLabel L = new JLabel("SUBJECT: " + subjectArray[j]);
-            L.setFont(new Font("Verdana", Font.PLAIN, 18));
-            sumPanel[j].add(L);
-            middlePanel.add(sumPanel[j]);
-        }
+            //fil in the array of the sender ,subject, and message of all emails
+            for (int i = totalM - 1; i >= 0; i--) {
+                senderArray[i] = RetrieveEmailTest.getSender(i + 1);
+                subjectArray[i] = RetrieveEmailTest.getSubject(i + 1);
+                messageArray[i] = RetrieveEmailTest.getMessage(i + 1);
+            }
 
-        ////////////////////----ABOVE PASS
+
+        sumPanel = new Panel[totalPanelsPerPage];
+        b = new Button[totalPanelsPerPage];
 
         //action listener for the button to view each specific email
-        ViewActionListener[] vListener = new ViewActionListener[totalM];
+        vListener = new ViewActionListener[totalPanelsPerPage];
 
-//        //attach listener to the button
-        for (int k=totalM-1;k>=0;k--){
-            vListener[k] = new ViewActionListener();
-            b[k].addActionListener(vListener[k]);
+        //------------------------------------------------------------FROM HERE DOWNWARDS IT WILL CHANGE
+        //first determine if start email is >10 or <10
+        if (totalM > 10) {
+
+            int k = totalPanelsPerPage-1;
+
+            //put the most recent email at the top
+            //take only the first 10
+            for (int j = totalM - 1; j >= totalM - 1 - 9; j--) {
+                    sumPanel[k] = new Panel(new GridLayout(0, 1));
+                    b[k] = new Button("" + (j + 1));
+                    b[k].setFont(new Font("Verdana", Font.BOLD, 20));
+                    sumPanel[k].add(b[k]);
+                    K = new JLabel("FROM: " + senderArray[j]);
+                    K.setFont(new Font("Verdana", Font.PLAIN, 18));
+                    sumPanel[k].add(K);
+                    L = new JLabel("SUBJECT: " + subjectArray[j]);
+                    L.setFont(new Font("Verdana", Font.PLAIN, 18));
+                    sumPanel[k].add(L);
+                    middlePanel.add(sumPanel[k]);
+
+
+                    vListener[k] = new ViewActionListener();
+                    b[k].addActionListener(vListener[k]);
+
+                    k--;
+            }
         }
+        //1-10
+        else{
+
+            //put the most recent email at the top
+            //take only the first 10
+            for (int j = totalM - 1; j >= 0; j--) {
+                sumPanel[j] = new Panel(new GridLayout(0, 1));
+                b[j] = new Button("" + (j + 1));
+                b[j].setFont(new Font("Verdana", Font.BOLD, 20));
+                sumPanel[j].add(b[j]);
+                K = new JLabel("FROM: " + senderArray[j]);
+                K.setFont(new Font("Verdana", Font.PLAIN, 18));
+                sumPanel[j].add(K);
+                L = new JLabel("SUBJECT: " + subjectArray[j]);
+                L.setFont(new Font("Verdana", Font.PLAIN, 18));
+                sumPanel[j].add(L);
+                middlePanel.add(sumPanel[j]);
+
+                vListener[j] = new ViewActionListener();
+                b[j].addActionListener(vListener[j]);
+            }
+        }
+
         //--------------------------------------------------
         Panel bottomPanel = new Panel(new FlowLayout()); //BOTTOM
         nextBut = new Button("NEXT");
         nextBut.setFont(new Font("Verdana", Font.PLAIN, 20));
+
+        backBut = new Button("BACK");
+        backBut.setFont(new Font("Verdana", Font.PLAIN, 20));
+
+        backBut.addActionListener(this);
+        nextBut.addActionListener(this);
+        bottomPanel.add(backBut);
         bottomPanel.add(nextBut);
+
         //--------------------------------------------------
         setTitle("Basic Email Client");
         Container contents = getContentPane();
@@ -145,8 +196,9 @@ public class MainPage extends JFrame
         MainPage em = new MainPage();
         em.setJMenuBar(bar);
         em.setVisible(true);
-
     }
+
+
 
     public static String getMessage(int n){
         return messageArray[n-1];
@@ -157,6 +209,137 @@ public class MainPage extends JFrame
 
     public static String getSender(int n){
         return senderArray[n-1];
+    }
+
+
+    public void actionPerformed(ActionEvent e){
+
+        //get the source of the button
+        Button source = (Button)e.getSource();
+        String label = source.getLabel();
+        int k = totalPanelsPerPage-1;
+
+        //NEXT button
+        if (label.equals("NEXT")){
+
+
+            System.out.print("CURRENT START: "  + start);
+
+            if (start > 0) {
+
+                start = start - 10;
+                if (start > 10) {
+
+                    //put the most recent email at the top
+                    //take only the first 10
+                    for (int j = start - 1; j >= start - 1 - 9; j--) {
+
+                        //sumPanel[j] = new Panel(new GridLayout(0, 1));
+                        b[k].setLabel("" + (j + 1));
+                        b[k].setFont(new Font("Verdana", Font.BOLD, 20));
+                        //sumPanel[j].add(b[j]);
+
+                        K.setText("FROM: " + senderArray[j]);
+                        K.setFont(new Font("Verdana", Font.PLAIN, 18));
+                        //sumPanel[j].add(K);
+
+                        L.setText("SUBJECT: " + subjectArray[j]);
+                        L.setFont(new Font("Verdana", Font.PLAIN, 18));
+                        //sumPanel[j].add(L);
+                        //middlePanel.add(sumPanel[j]);
+
+                        vListener[k] = new ViewActionListener();
+                        b[k].addActionListener(vListener[k]);
+
+                        k--;
+                    }
+                } else if ((start > 0) && (start <= 10)) {
+
+                    for (int j = k; k >= start - 1; j--) {
+                        b[j].setLabel("" + (j + 1));
+                        b[j].setFont(new Font("Verdana", Font.BOLD, 20));
+
+                        K.setText("FROM: " + senderArray[j]);
+                        K.setFont(new Font("Verdana", Font.PLAIN, 18));
+
+
+                        L.setText("SUBJECT: " + subjectArray[j]);
+                        L.setFont(new Font("Verdana", Font.PLAIN, 18));
+
+                        int B;
+
+                        vListener[j] = new ViewActionListener();
+                        b[j].addActionListener(vListener[j]);
+
+                    }
+
+
+                    for (int j = start - 1; j >= 0; j--) {
+
+                        b[j].setLabel("" + (j + 1));
+                        b[j].setFont(new Font("Verdana", Font.BOLD, 20));
+
+                        K.setText("FROM: " + senderArray[j]);
+                        K.setFont(new Font("Verdana", Font.PLAIN, 18));
+
+
+                        L.setText("SUBJECT: " + subjectArray[j]);
+                        L.setFont(new Font("Verdana", Font.PLAIN, 18));
+
+
+                        vListener[j] = new ViewActionListener();
+                        b[j].addActionListener(vListener[j]);
+
+                    }
+                } else ;
+
+                if (start < 0)
+                    start = start + 10;
+            }
+        }
+        //BACK button
+        else if (label.equals("BACK")) {
+
+
+           if (start < totalM) {
+
+               start = start + 10;
+                if (start > 10) {
+
+                    //put the most recent email at the top
+                    //take only the first 10
+                    for (int j = start - 1; j >= start - 1 - 9; j--) {
+
+                        int ab;
+
+                        //sumPanel[j] = new Panel(new GridLayout(0, 1));
+                        b[k].setLabel("" + (j + 1));
+                        b[k].setFont(new Font("Verdana", Font.BOLD, 20));
+                        //sumPanel[j].add(b[j]);
+
+                        K.setText("FROM: " + senderArray[j]);
+                        K.setFont(new Font("Verdana", Font.PLAIN, 18));
+                        //sumPanel[j].add(K);
+
+                        L.setText("SUBJECT: " + subjectArray[j]);
+                        L.setFont(new Font("Verdana", Font.PLAIN, 18));
+                        //sumPanel[j].add(L);
+                        //middlePanel.add(sumPanel[j]);
+
+                        vListener[k] = new ViewActionListener();
+                        b[k].addActionListener(vListener[k]);
+
+                        k--;
+                    }
+                }
+
+            }
+        }
+        else;
+
+        pack();
+
+
     }
 
 }
