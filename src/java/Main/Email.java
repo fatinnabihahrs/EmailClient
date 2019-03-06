@@ -1,23 +1,37 @@
 package Main;
 
+import java.util.ArrayList;
+
 public class Email {
 
-    private static String sender;
-    private static String subject;
-    private static int no;
+    private String sender;
+    private String subject;
+    private String content;
+    private ArrayList<String> tags;
+    private int no;
 
-    public Email(String send, String subj, int n){
+    public Email(String send, String subj, String m, ArrayList<String> t,int n){
         sender = send;
         subject = subj;
+        content = m;
+        tags = t;
         no = n;
     }
 
-    public static String getSender(int n){
+    public String getSender(int n){
         return sender;
     }
 
-    public static String getSubject(int n){
+    public String getSubject(int n){
         return subject;
+    }
+
+    public String getContent(int n){
+        return content;
+    }
+
+    public ArrayList<String> getTags(int n){
+        return tags;
     }
 
 }

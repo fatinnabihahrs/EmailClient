@@ -3,19 +3,55 @@ package Main;//this is the gui for the 2nd page of the application - viewing an 
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import Listeners.*;
 
 
-public class ViewEmail extends JFrame{
+public class ViewEmail extends JFrame implements ActionListener {
 
     private static String sender;
     private static String subject;
     private static String message;
     private static int msgNo;
 
+
+    private static JMenuBar bar;
+    private static JMenu menu;
+    private static JMenu submenu;
+    private static JMenuItem i1, i2, i3;
+
+    //private static JMenuBar tagBar;
+
+    private static String option = "";
+
     //constructor
     public ViewEmail(){
 
+
+        //------------------------------------------------MENU BAR AT WINDOW BAR
+        bar = new JMenuBar();
+        menu = new JMenu("Settings");
+        menu.setFont(new Font("Verdana", Font.PLAIN, 20));
+        submenu = new JMenu("Reply");
+        submenu.setFont(new Font("Verdana", Font.PLAIN, 20));
+        i1 = new JMenuItem("Top-posting");
+        i1.setFont(new Font("Verdana", Font.PLAIN, 20));
+        i2 = new JMenuItem("Bottom-posting");
+        i2.setFont(new Font("Verdana", Font.PLAIN, 20));
+        i3 = new JMenuItem("Inline-posting");
+        i3.setFont(new Font("Verdana", Font.PLAIN, 20));
+
+        i1.addActionListener(this);
+        i2.addActionListener(this);
+        i3.addActionListener(this);
+
+        bar.add(menu);
+        menu.add(submenu);
+        submenu.add(i1);
+        submenu.add(i2);
+        submenu.add(i3);
         //-----------------------------------------------
         Panel topPanel = new Panel(new GridLayout(2,0));  //TOP
 
@@ -33,6 +69,8 @@ public class ViewEmail extends JFrame{
         email.setFont(new Font("Verdana", Font.BOLD, 18));
         //------------------------------------------------
         Panel bottomPanel = new Panel(new FlowLayout());        //BOTTOM
+        JButton tagsBut = new JButton("TAGS");
+        tagsBut.setFont(new Font("Verdana", Font.PLAIN, 20));
         JButton newMsgBut = new JButton("NEW MESSAGE");
         newMsgBut.setFont(new Font("Verdana", Font.PLAIN, 20));
         JButton replyBut = new JButton("REPLY");
@@ -41,6 +79,7 @@ public class ViewEmail extends JFrame{
         forwardBut.setFont(new Font("Verdana", Font.PLAIN, 20));
         JButton redirectBut = new JButton("REDIRECT");
         redirectBut.setFont(new Font("Verdana", Font.PLAIN, 20));
+        bottomPanel.add(tagsBut);
         bottomPanel.add(newMsgBut);
         bottomPanel.add(replyBut);
         bottomPanel.add(forwardBut);
@@ -52,6 +91,9 @@ public class ViewEmail extends JFrame{
         contents.add(topPanel, BorderLayout.NORTH);
         contents.add(email, BorderLayout.CENTER);
         contents.add(bottomPanel, BorderLayout.SOUTH);
+
+        TagsActionListener tagListener = new TagsActionListener(message);
+        tagsBut.addActionListener(tagListener);
 
         NewMsgActionListener newListener = new NewMsgActionListener(sender);  //DONE
         newMsgBut.addActionListener(newListener);
@@ -74,6 +116,7 @@ public class ViewEmail extends JFrame{
 
     public static void main(String[] args){
         ViewEmail em = new ViewEmail();
+        em.setJMenuBar(bar);
         em.setVisible(true);
     }
 
@@ -96,6 +139,17 @@ public class ViewEmail extends JFrame{
 
     public static void start(){
         main(null);
+    }
+
+    public static String getOption(){
+        return option;
+    }
+
+    public void actionPerformed(ActionEvent e){
+        //get the source of the button
+        JMenuItem source = (JMenuItem) e.getSource();
+        option = source.getLabel();
+        System.out.println("View email: " + option);
     }
 
 }

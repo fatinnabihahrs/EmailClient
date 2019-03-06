@@ -1,19 +1,25 @@
 package Main;
 
 import javax.swing.*;
+import javax.swing.text.DefaultHighlighter;
 import java.awt.*;
+import java.awt.event.*;
+import java.util.ArrayList;
+
+
 import Listeners.SendActionListener;
 
-public class ComposeEmail extends JFrame {
+public class ComposeEmail extends JFrame{
 
-    //private static JTextField senderField;
     private static TextField recipientField;
     private static TextField subjectField;
-    private static TextArea emailField;
+    private static JTextArea emailField;
 
     private static String recipient = "";
     private static String subject = "";
     private static String message = "";
+
+    private boolean setInLine;
 
     //contructor
     public ComposeEmail(){
@@ -43,14 +49,38 @@ public class ComposeEmail extends JFrame {
         topPanel.add(p2);
         //--------------------------------------------------------
         if (message == "")
-            emailField = new TextArea(100,100); //CENTER
+            emailField = new JTextArea(100, 100); //CENTER
         else {
             //emailField = new TextArea("\n -----Original Message----- \n" + message, 100, 100); //only use this for reply button set
-            emailField = new TextArea("\n" + ">" + message, 100, 100);
-            //emailField.setCaretPosition(0);
+            if (setInLine) {
+                emailField = new JTextArea("\n " + message, 100, 100);
+            }
+            else {
+                emailField = new JTextArea("\n" + message, 100, 100);
+                //emailField.setText(message);
+            }
+            emailField.setCaretPosition(0);
         }
-
+        emailField.setForeground(Color.pink);
         emailField.setFont(new Font("Verdana", Font.BOLD, 30));
+
+
+        //ONLY FOR INLINE POSTING
+        //highlight the text in email
+        emailField.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(SwingUtilities.isRightMouseButton(e)){
+                    int end = emailField.getSelectionEnd();
+                    emailField.setCaretPosition(end);
+                    emailField.insert( "\n\t|",emailField.getCaretPosition());
+                    emailField.insert("\n", emailField.getCaretPosition());
+                    //emailField.setForeground(Color.red);
+                    System.out.println("HERE: " + emailField.getSelectedText());
+                }
+            }
+        });
+
         //-------------------------------------------------------
         JPanel bottom = new JPanel(new FlowLayout()); //BOTTOM
         JButton sendButton = new JButton("SEND");
@@ -116,8 +146,12 @@ public class ComposeEmail extends JFrame {
     }
 
 
-    public static TextArea getEmailField(){
+    public static JTextArea getEmailField(){
         return emailField;
     }
 
+
+    public void setInLine(boolean b){
+        setInLine = b;
+    }
 }
