@@ -30,6 +30,8 @@ public class ViewActionListener implements ActionListener {
         v.setSender(MainPage.getSender(emailNo));
         v.setSubject(MainPage.getSubject(emailNo));
         v.setMessage(MainPage.getMessage(emailNo));
+        System.out.println("TAGS VIEW EMAIL: !!!!!!!" + MainPage.getTags(emailNo));
+        v.setTags(MainPage.getTags(emailNo));
         v.start();
 
     }

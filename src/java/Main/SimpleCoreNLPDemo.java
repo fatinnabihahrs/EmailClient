@@ -4,23 +4,25 @@ import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.pipeline.CoreDocument;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 import java.util.regex.Pattern;
-
+import java.lang.String;
+import java.util.stream.Collectors;
 
 public class SimpleCoreNLPDemo {
 
     //instance variable
     //public static String text = "";
+    public int number;
     public SimpleCoreNLPDemo(){
 
     }
 
-    public static ArrayList<String> getTokens(String t) {
+    public ArrayList<String> getTokens(String t, String subj,int n) {
 
         String text = t;
+        String subject = subj;
+        number = n;
 
         // set up pipeline properties
         Properties props = new Properties();
@@ -32,7 +34,7 @@ public class SimpleCoreNLPDemo {
         // build pipeline
         StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
         // create a document object
-        CoreDocument document = new CoreDocument(text);
+        CoreDocument document = new CoreDocument(text + subject);
         // annnotate the document
         pipeline.annotate(document);
         // examples
@@ -72,12 +74,26 @@ public class SimpleCoreNLPDemo {
             }
         }
         //System.out.println(newListTokens);
+        //return newListTokens;
+
+
+        //remove duplicates
+        StringBuilder sb = new StringBuilder();
+        for (String s: newListTokens){
+            sb.append(s);
+            sb.append(" ");
+        }
+
+        List<String> list1 = Arrays.asList(sb.toString().split(" "));
+        List<String> list2 = list1.stream().distinct().collect(Collectors.toList());
+        newListTokens = (ArrayList)list2;
+        System.out.println(newListTokens);
         return newListTokens;
 
 
 
-//
-//        String splitTokens[] = tokensFound.split(" ");
+
+//        String splitTokens[] = newListTokens.split(" ");
 //        Map<String, Integer> words = new HashMap<>();
 //
 //        //count the occurence of each word
@@ -101,4 +117,8 @@ public class SimpleCoreNLPDemo {
         //double weightAdj = 0.6;
 
     }
+
+//    public int getNumber(){
+//        return number;
+//    }
 }

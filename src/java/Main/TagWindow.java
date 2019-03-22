@@ -7,6 +7,7 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.text.View;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,16 +23,15 @@ public class TagWindow extends JFrame implements ActionListener {
     private static List<String> selectedList;
     private boolean yesSelect=false;
     private ArrayList<String> tokensList;
+    private int emailNu;
 
-    public TagWindow (ArrayList<String> tokens){
+    public TagWindow (ArrayList<String> tokens, int n){
 
         JPanel topP = new JPanel(new GridLayout(0,1));
         JLabel instruction = new JLabel("Please choose the tags appropriate for this email");
-        instruction.setFont(new Font("Verdana", Font.PLAIN, 20));
-//        String[] data = new String[2];
-//        data[0] = "Hello";
-//        data[1] = "World";
+        instruction.setFont(new Font("Verdana", Font.PLAIN, 25));
         tokensList = tokens;
+        emailNu = n;
 
 
         //create the model and add elements
@@ -44,7 +44,7 @@ public class TagWindow extends JFrame implements ActionListener {
 
 
         tagsList = new JList<>(listModel);
-        tagsList.setFont(new Font("Verdana", Font.PLAIN, 20));
+        tagsList.setFont(new Font("Verdana", Font.PLAIN, 25));
         tagsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         tagsList.addListSelectionListener(new ListSelectionListener() {
             @Override
@@ -52,6 +52,7 @@ public class TagWindow extends JFrame implements ActionListener {
                 if (!e.getValueIsAdjusting()){
                     yesSelect = true;
                     selectedList = tagsList.getSelectedValuesList();
+                    //selectedList = (ArrayList<>)selectedList;
                     System.out.println(selectedList);
 //                    for (int i=0;i<selectedList.size();i++) {
 //                        tagsDisplayedArea.setText(selectedList.get(i));
@@ -116,7 +117,7 @@ public class TagWindow extends JFrame implements ActionListener {
 //        main(null);
 //    }
 
-    List<String> ifZero;
+    ArrayList<String> ifZero = new ArrayList<>();
 
     //this sets the tags for each email
     public void actionPerformed(ActionEvent e){
@@ -127,8 +128,10 @@ public class TagWindow extends JFrame implements ActionListener {
         System.out.println(source);
         if (source == "SHOW") {
             temp = tagField.getText();
+            System.out.println("temp: "+ temp);
             if (!yesSelect) {
                 tagsDisplayedArea.setText(temp);
+                ifZero.add(temp);
             }
             else {
                 selectedList.add(temp);
@@ -140,11 +143,45 @@ public class TagWindow extends JFrame implements ActionListener {
                 tagsDisplayedArea.setText(newL);
             }
         }
-        else if (source == "CLEAR")
+        else if (source == "CLEAR") {
             tagsDisplayedArea.setText("");
+            if (!ifZero.isEmpty())
+                ifZero.clear();
+            else {
+                selectedList.clear();
+            }
+        }
         else if (source == "CONFIRM"){
             //get the list of tags confirmed by user and set it to that particular email
+            String tag = tagsDisplayedArea.getText();
+            System.out.println(tag);
 
+            //SimpleCoreNLPDemo simple = new SimpleCoreNLPDemo();
+            //int emailNu = simple.getNumber();
+            System.out.println("EMAIL NUMBER: **" + emailNu);
+            Email[] emails = MainPage.getEmailArray();
+            if (!ifZero.isEmpty())
+                emails[emailNu - 1].setTags((ArrayList<String>) ifZero);
+            else {
+                emails[emailNu - 1].setTags((ArrayList<String>) selectedList);
+            }
+
+
+
+//            //try using the hashmap here
+//            //dont allow duplicates here
+//            TagEmailNumberMap tagEm = new TagEmailNumberMap();
+//            for (int i=0;i<selectedList.size();i++) {
+//                //if the map already has the tag
+//                    tagEm.putNew(emailNu, selectedList.get(i));
+//
+//            }
+            System.out.println("EMAILS TAGS: **" + emails[emailNu-1].getTags());
+            tagsDisplayedArea.setText("Tags set!");
+
+            MainPage.setTags(emailNu, emails[emailNu-1].getTags());
+            //ViewEmail vm = new ViewEmail();
+            //vm.setTags(emails[emailNu-1].getTags());
 
         }
         else

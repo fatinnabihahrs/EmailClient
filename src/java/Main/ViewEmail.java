@@ -5,6 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import Listeners.*;
 
@@ -15,6 +16,7 @@ public class ViewEmail extends JFrame implements ActionListener {
     private static String subject;
     private static String message;
     private static int msgNo;
+    private static String time;
 
 
     private static JMenuBar bar;
@@ -25,6 +27,8 @@ public class ViewEmail extends JFrame implements ActionListener {
     //private static JMenuBar tagBar;
 
     private static String option = "";
+
+    private static ArrayList<String> tagsList = new ArrayList<>();
 
     //constructor
     public ViewEmail(){
@@ -53,20 +57,30 @@ public class ViewEmail extends JFrame implements ActionListener {
         submenu.add(i2);
         submenu.add(i3);
         //-----------------------------------------------
-        Panel topPanel = new Panel(new GridLayout(2,0));  //TOP
+        Panel topPanel = new Panel(new GridLayout(0,1));  //TOP
 
         JLabel j = new JLabel("FROM: " + sender);
-        j.setFont(new Font("Verdana", Font.BOLD, 18));
+        j.setFont(new Font("Verdana", Font.BOLD, 25));
 
         JLabel k = new JLabel("SUBJECT: " + subject);
-        k.setFont(new Font("Verdana", Font.BOLD, 18));
+        k.setFont(new Font("Verdana", Font.BOLD, 25));
+        JLabel t;
+        if (!tagsList.isEmpty())
+            t = new JLabel("TAGS: " + tagsList);
+        else {
+            System.out.println("IS IT GOING HERE EVERYITME?");
+            t = new JLabel("TAGS: ");
+        }
+        t.setFont(new Font("Verdana", Font.BOLD, 25));
+
 
         topPanel.add(j);
         topPanel.add(k);
+        topPanel.add(t);
         //------------------------------------------------
         JLabel email = new JLabel("<html>"  + message + "</html>");  //MIDDLE
         //JLabel email = new JLabel(message);  //MIDDLE
-        email.setFont(new Font("Verdana", Font.BOLD, 18));
+        email.setFont(new Font("Verdana", Font.BOLD, 25));
         //------------------------------------------------
         Panel bottomPanel = new Panel(new FlowLayout());        //BOTTOM
         JButton tagsBut = new JButton("TAGS");
@@ -92,7 +106,7 @@ public class ViewEmail extends JFrame implements ActionListener {
         contents.add(email, BorderLayout.CENTER);
         contents.add(bottomPanel, BorderLayout.SOUTH);
 
-        TagsActionListener tagListener = new TagsActionListener(message);
+        TagsActionListener tagListener = new TagsActionListener(message, subject,msgNo);
         tagsBut.addActionListener(tagListener);
 
         NewMsgActionListener newListener = new NewMsgActionListener(sender);  //DONE
@@ -137,6 +151,10 @@ public class ViewEmail extends JFrame implements ActionListener {
         msgNo = i;
     }
 
+    public static void setTime(String t){
+        time = t;
+    }
+
     public static void start(){
         main(null);
     }
@@ -150,6 +168,11 @@ public class ViewEmail extends JFrame implements ActionListener {
         JMenuItem source = (JMenuItem) e.getSource();
         option = source.getLabel();
         System.out.println("View email: " + option);
+    }
+
+    //show the tags that user set when viewing email
+    public static void setTags(ArrayList<String> t){
+        tagsList = t;
     }
 
 }

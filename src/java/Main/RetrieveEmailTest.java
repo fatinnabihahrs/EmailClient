@@ -4,6 +4,7 @@ import javax.mail.*;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Enumeration;
 import java.util.Properties;
 
 public class RetrieveEmailTest {
@@ -14,6 +15,7 @@ public class RetrieveEmailTest {
     private static String sender;
     private static int emailNo;
     private static String messagePassed;
+    private static String timeExpected;
 
 
     public static void main (String[] args){
@@ -25,8 +27,8 @@ public class RetrieveEmailTest {
         try {
             String host = "imap.gmail.com";
             String mailStoreType = "imaps";
-            String username = "projectfatin@gmail.com";
-            String password = "blngwyzxdgwdcgfb";
+            String username = "projectemailfatin@gmail.com";
+            String password = "giefxbmblfeuonho";
 
             //boolean sessionDebug = false;
 
@@ -49,18 +51,45 @@ public class RetrieveEmailTest {
 
             Folder emailFolder = store.getFolder("INBOX");
             emailFolder.open(Folder.READ_ONLY);
+            System.out.println("LINE 55 INDEX: "+ index + " : " + choose);
 
-            if (choose == 0)
+
+            if (choose == 0) {
+                //System.out.println("DOES IT GO HERE MOST OF THE TIME???");
                 msgCount = emailFolder.getMessageCount();
-            else {
-                //System.out.println("Line 56 RET:" + index);
+            }
+            else if (choose == 1){
+                //System.out.println("DOES IT GO HERE MOST OF THE TIME??? : " + choose);
                 Message message = emailFolder.getMessage(index);
+
+//                boolean done = false;
+
+
+                //message.getHeader("time");
+                Enumeration headers = message.getAllHeaders();
+                while (headers.hasMoreElements()){
+                    Header h = (Header) headers.nextElement();
+                    if (h.getName().equals("time")) {
+                        timeExpected = h.getValue();
+                        System.out.println(timeExpected);
+//                        done = true;
+                    }
+                }
+
+                //System.out.println("*******EMAIL " + index + ": " + timeExpected);
+
+
                 subject = message.getSubject();
                 sender = "" + message.getFrom()[0];
                 messagePassed = getTextMessage(message); //content of the message
+                //System.out.println("RESTEST: " + index + " : " + sender +  " : " + subject);
+                store.close();
             }
+            else
+                ;
         }
         catch (Exception e){
+            System.out.println("FAILED HERE? INDEX: " + index);
             System.out.println(e);
         }
 
@@ -108,17 +137,28 @@ public class RetrieveEmailTest {
 
     public static String getSubject(int index){
         start(1, index);
+        //String temp = subject;
+        //subject = "";
         return subject;
     }
 
     public static String getSender(int index){
         start(1, index);
+        //String temp = sender;
+        //sender = "";
         return sender;
     }
 
     public static String getMessage(int index){
         start(1, index);
+        //String temp = messagePassed;
+        //messagePassed = "";
         return messagePassed;
+    }
+
+    public static String getTime(int index){
+        start(1, index);
+        return timeExpected;
     }
 
     public static void start(int choose, int index){

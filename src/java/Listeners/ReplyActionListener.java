@@ -34,7 +34,7 @@ public class ReplyActionListener implements ActionListener {
 
     public static void handleBasic(){
         reply.setRecipient(recipient);
-        reply.setSubject(subject);
+        reply.setSubject("RE:" + subject);
     }
 
     public static String getOption(){

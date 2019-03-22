@@ -15,10 +15,13 @@ public class SendActionListener implements ActionListener{
         String recp = ComposeEmail.getRecipient();
         String subj = ComposeEmail.getSubject();
         String msg = ComposeEmail.getEmailMessage();
+        String time = ComposeEmail.getTime();
+        System.out.println("SENDACTIONLISTENER: " + time);
 
         SendingEmail.setMessage(msg);
         SendingEmail.setRecp(recp);
         SendingEmail.setSubject(subj);
+        SendingEmail.setTime(time);
         SendingEmail.start();           //invoke the main method
     }
 

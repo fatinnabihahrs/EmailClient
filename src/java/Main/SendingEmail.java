@@ -18,20 +18,18 @@ import java.util.Properties;
 
 public class SendingEmail {
 
-    private static String from = "projectfatin@gmail.com";; //sender's email -- the default email is projectfatin@gmail.com
+    private static String from = "projectemailfatin@gmail.com";; //sender's email -- the default email is projectfatin@gmail.com
     private static String recipient; //recipient's email
     private static String subject;  //subject
     private static String content;  //email content
+    private static String time; //= "3/12/2019//1400"; //expected the sender to receive
 
     public static void main(String[] args){
         try{
             String host = "smtp.gmail.com";
 
-            String user = "projectfatin@gmail.com";
-            String password = "blngwyzxdgwdcgfb";             //gmail password-for app that dont support 2 factor verification
-
-
-            //from = "projectfatin@gmail.com";         //default sender
+            String user = "projectemailfatin@gmail.com";
+            String password = "giefxbmblfeuonho";             //gmail password-for app that dont support 2 factor verification
 
 
             boolean sessionDebug = false;
@@ -51,6 +49,9 @@ public class SendingEmail {
             ((MimeMessage) msg).setRecipients(Message.RecipientType.TO, address);
             msg.setSubject(subject);
             msg.setSentDate(new Date());
+
+            // day/month/year//24hoursystem
+            msg.addHeader("time", time);
             ((MimeMessage) msg).setText(content);
             Transport transport = mailSession.getTransport("smtp");
             transport.connect(host, user, password);
@@ -78,6 +79,10 @@ public class SendingEmail {
 
     public static void setFrom(String r){
         from = r;
+    }
+
+    public static void setTime(String t){
+        time = t;
     }
 
     public static void start(){
